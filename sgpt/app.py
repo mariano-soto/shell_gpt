@@ -165,7 +165,9 @@ def main(
     ), 
 ) -> None:
     stdin_passed = not sys.stdin.isatty()
-     
+    if len(prompt) == 0:
+        print("Prompt can't be empty")
+
     if _set:
         params = convert_config_compatible(ctx.params)
         changed_settings = dict_diff_keys(params, cfg.get_dict())
