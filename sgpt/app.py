@@ -105,7 +105,7 @@ def main(
     ),
     repl: str = typer.Option(
         None,
-        help="Start a REPL (Read–eval–print loop) session.",
+        help="Start a REPL (Read-eval-print loop) session.",
         rich_help_panel="Chat Options",
     ),
     show_chat: str = typer.Option(
@@ -165,8 +165,6 @@ def main(
     ), 
 ) -> None:
     stdin_passed = not sys.stdin.isatty()
-    if len(prompt) == 0:
-        print("Prompt can't be empty")
 
     if _set:
         params = convert_config_compatible(ctx.params)
@@ -175,6 +173,9 @@ def main(
             cfg.set(key, params[key])
         return
 
+    if len(prompt) == 0:
+        print("Prompt can't be empty")
+    
     if stdin_passed:
         stdin = ""
         # TODO: This is very hacky.
