@@ -3,13 +3,13 @@ import platform
 import shlex
 from tempfile import NamedTemporaryFile
 from typing import Any, Callable
-
+import re
 import typer
 from click import BadParameter, UsageError
 
 from sgpt.__version__ import __version__
 from sgpt.integration import bash_integration, zsh_integration
-
+from sgpt.config import CONFIG_FIELDS_LIST
 
 def get_edited_prompt() -> str:
     """
@@ -93,3 +93,18 @@ def get_sgpt_version(*_args: Any) -> None:
     Displays the current installed version of ShellGPT
     """
     typer.echo(f"ShellGPT {__version__}")
+
+def dict_diff_keys(dict1, dict2):
+
+    return [
+        key
+        for key in dict1
+        if (key in dict1 and key in dict2) and dict1[key] != dict2[key]
+    ]
+
+def convert_config_compatible(config):
+    convert = lambda x: "DEFAULT_" + str(x).upper()
+    new_config = {}
+    for key, value in config.items():
+        new_config[CONFIG_FIELDS_LIST.get(key, convert(key))] = value
+    return new_config

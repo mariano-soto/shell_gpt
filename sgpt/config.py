@@ -26,6 +26,16 @@ FUNCTIONS_PATH = SHELL_GPT_CONFIG_FOLDER / "functions"
 CHAT_CACHE_PATH = Path(gettempdir()) / "chat_cache"
 CACHE_PATH = Path(gettempdir()) / "cache"
 
+CONFIG_FIELDS_LIST = {
+    "model": "DEFAULT_MODEL",
+    "temperature": "DEFAULT_TEMPERATURE",
+    "top_p": "DEFAULT_TOP_P",
+    "md": "PRETTIFY_MARKDOWN",
+    "editor": "DEFAULT_EDITOR",
+    "cache": "DEFAULT_CACHE",
+    "functions": "OPENAI_USE_FUNCTIONS",
+}
+
 # TODO: Refactor ENV variables with SGPT_ prefix.
 DEFAULT_CONFIG = {
     # TODO: Refactor it to CHAT_STORAGE_PATH.
@@ -49,6 +59,10 @@ DEFAULT_CONFIG = {
     "SHELL_INTERACTION": os.getenv("SHELL_INTERACTION ", "true"),
     "OS_NAME": os.getenv("OS_NAME", "auto"),
     "SHELL_NAME": os.getenv("SHELL_NAME", "auto"),
+    "DEFAULT_TEMPERATURE": os.getenv("DEFAULT_TEMPERATURE", "1"),
+    "DEFAULT_EDITOR": os.getenv("DEFAULT_EDITOR", "false"),
+    "DEFAULT_CACHE": os.getenv("DEFAULT_CACHE", "true"),
+    "DEFAULT_TOP_P": os.getenv("DEFAULT_TOP_P", "0.95"),
     # New features might add their own config variables here.
 }
 
@@ -99,6 +113,18 @@ class Config(dict):  # type: ignore
         if not value:
             raise UsageError(f"Missing config key: {key}")
         return value
-
+    
+    def set(self, key: str, value: bool | int | float | str) -> None: # type: ignore
+        value = str(value)
+        if not value:
+            raise UsageError("Missing Value")
+        if key not in dict(self).keys():
+            return
+        
+        self[key] = value
+        self._write()
+    
+    def get_dict(self):
+        return dict(self)
 
 cfg = Config(SHELL_GPT_CONFIG_PATH, **DEFAULT_CONFIG)

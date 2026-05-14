@@ -1,0 +1,6 @@
+**Commit:** Add CLI config override via `--set` and normalize defaults
+
+- Introduce `--set` option in `sgpt/app.py` to update config fields from CLI at runtime.
+- Add `CONFIG_FIELDS_LIST` and default env-backed settings in `sgpt/config.py`.
+- Implement helpers in `sgpt/utils.py`: `dict_diff_keys()` to detect changed keys, and `convert_config_compatible()` to map CLI params to `DEFAULT_*` config keys.
+- Refactor temperature/top_p defaults to use values from config.

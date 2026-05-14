@@ -21,10 +21,13 @@ from sgpt.utils import (
     get_sgpt_version,
     install_shell_integration,
     run_command,
+    dict_diff_keys,
+    convert_config_compatible,
 )
-
+from typing import List
 
 def main(
+    ctx: typer.Context,
     prompt: str = typer.Argument(
         "",
         show_default=False,
@@ -35,13 +38,13 @@ def main(
         help="Large language model to use.",
     ),
     temperature: float = typer.Option(
-        0.0,
+        float(cfg.get("DEFAULT_TEMPERATURE")),
         min=0.0,
         max=2.0,
         help="Randomness of generated output.",
     ),
     top_p: float = typer.Option(
-        1.0,
+        float(cfg.get("DEFAULT_TOP_P")),
         min=0.0,
         max=1.0,
         help="Limits highest probable tokens (words).",
@@ -155,8 +158,20 @@ def main(
         callback=inst_funcs,
         hidden=True,  # Hiding since should be used only once.
     ),
+    _set: bool = typer.Option(
+            False,
+            '--set',
+            help="Set any config field from CLI"
+    ), 
 ) -> None:
     stdin_passed = not sys.stdin.isatty()
+     
+    if _set:
+        params = convert_config_compatible(ctx.params)
+        changed_settings = dict_diff_keys(params, cfg.get_dict())
+        for key in changed_settings:
+            cfg.set(key, params[key])
+        return
 
     if stdin_passed:
         stdin = ""
@@ -267,10 +282,8 @@ def main(
             continue
         break
 
-
 def entry_point() -> None:
     typer.run(main)
-
 
 if __name__ == "__main__":
     entry_point()
