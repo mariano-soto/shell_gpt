@@ -175,7 +175,8 @@ def main(
 
     if len(prompt) == 0:
         print("Prompt can't be empty")
-    
+        return     
+
     if stdin_passed:
         stdin = ""
         # TODO: This is very hacky.
