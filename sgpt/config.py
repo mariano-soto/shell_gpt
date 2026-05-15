@@ -115,7 +115,7 @@ class Config(dict):  # type: ignore
         return value
     
     def set(self, key: str, value: bool | int | float | str) -> None: # type: ignore
-        value = str(value)
+        value = str(value) if not isinstance(value, bool) else str(value).lower()
         if not value:
             raise UsageError("Missing Value")
         if key not in dict(self).keys():
