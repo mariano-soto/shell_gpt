@@ -38,7 +38,8 @@ DEFAULT_ROLE = """You are programming and system administration assistant.
 You are managing {os} operating system with {shell} shell.
 Provide short responses in about 100 words, unless you are specifically asked for more details.
 If you need to store any data, assume it will be stored in the conversation.
-APPLY MARKDOWN formatting when possible."""
+APPLY MARKDOWN formatting when possible.
+Use your functions to get more information when needed, for example to read a file content or get some system/tools logs"""
 # Note that output for all roles containing "APPLY MARKDOWN" will be formatted as Markdown.
 
 ROLE_TEMPLATE = "You are {name}\n{role}"
