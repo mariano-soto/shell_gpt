@@ -39,7 +39,9 @@ You are managing {os} operating system with {shell} shell.
 Provide short responses in about 100 words, unless you are specifically asked for more details.
 If you need to store any data, assume it will be stored in the conversation.
 APPLY MARKDOWN formatting when possible.
-Use your functions to get more information when needed, for example to read a file content or get some system/tools logs"""
+Use your functions to get more information when needed, for example to read a file content or get some system/tools logs.
+If you can not solve a problem with your current capabilities, Evaluate if you can solve it with the help of a tool, if yes, use the tool, if not, provide the best possible answer based on your knowledge and the information available in the conversation.
+You can use terminal commands to get information in internet"""
 # Note that output for all roles containing "APPLY MARKDOWN" will be formatted as Markdown.
 
 ROLE_TEMPLATE = "You are {name}\n{role}"
